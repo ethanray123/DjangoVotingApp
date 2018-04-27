@@ -33,19 +33,23 @@ class CandidateView(DetailView):
 
 def vote(request, candidate_id):
     voter = request.user
+    voterCandidacy = get_object_or_404(Candidate, user=voter)
     candidate = get_object_or_404(Candidate, pk=candidate_id)
     # position = Position.objects.filter(position_title)
     if (not candidate.is_voted(voter) and
             not candidate.position.is_voted(voter) and
-            voter.get_full_name != candidate.user.get_full_name):
+            voter.get_full_name != candidate.user.get_full_name and
+            voterCandidacy.party != candidate.party):
         Vote.objects.create(owner=voter, candidate=candidate)
         message = "Vote Successfully Registered"
     else:
-        # if(candidate.is_voted(voter) and
-        #     candidate.position.is_voted(voter)):
+        if(candidate.is_voted(voter) and
+                candidate.position.is_voted(voter)):
             message = "Cannot Vote! Vote Has Already Been Casted"
-        # elif voter.get_full_name != candidate.user.get_full_name:
-            # message = "Cannot Vote Self!"
+        elif voter.get_full_name == candidate.user.get_full_name:
+            message = "Cannot Vote for Yourself!"
+        elif voterCandidacy.party == candidate.party:
+            message = "Cannot Vote for the Same Party as You!"
 
     # redisplay the individual voting form.
     # add a Vote instance with:
@@ -65,15 +69,23 @@ def vote(request, candidate_id):
 
 def voteParty(request, party_id):
     voter = request.user
+    voterCandidacy = get_object_or_404(Candidate, user=voter)
     party = get_object_or_404(PartyList, pk=party_id)
     for candidate in party.candidate_infos.all():
         if (not candidate.is_voted(voter) and
                 not candidate.position.is_voted(voter) and
-                voter.get_full_name != candidate.user.get_full_name):
+                voter.get_full_name != candidate.user.get_full_name and
+                voterCandidacy.party != candidate.party):
             Vote.objects.create(owner=voter, candidate=candidate)
             message = "Vote Successfully Registered via Party List"
         else:
-            message = "Cannot Vote! Vote Has Already Been Casted"
+            if(candidate.is_voted(voter) and
+                    candidate.position.is_voted(voter)):
+                message = "Cannot Vote! Vote Has Already Been Casted"
+            elif voter.get_full_name == candidate.user.get_full_name:
+                message = "Cannot Vote for Yourself!"
+            elif voterCandidacy.party == candidate.party:
+                message = "Cannot Vote for the Same Party as You!"
     return render(
         request, 'position/vote.html',
         {
