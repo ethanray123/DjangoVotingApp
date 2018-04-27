@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Individual Voting</title>
+</head>
+<body>
+    {{message}}
+    <h1>Positions and their Candidates</h1>
+    <ul>
+      {% for position in positions %}
+      <li>
+        <h2>
+            {{position.position_title}}
+        </h2>
+          {% csrf_token %}
+          <ol>
+            {% for candidate in position.candidates %}
+              <li>
+                <p>{{candidate.user.get_full_name}} 
+                  {% if candidate.party %}
+                    - {{candidate.party.name}}</p> 
+                    <a href="{% url 'voting:vote' candidate.id %}">Vote</a>
+                  {% else %}
+                    - independent</p> 
+                    <a href="{% url 'voting:vote' candidate.id %}">Vote</a>
+                  {% endif %}
+              </li>
+
+            {% endfor %}
+          </ol>
+      </li>
+      {% endfor %}    
+    </ul>
+</body>
+</html>

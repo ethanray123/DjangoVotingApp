@@ -1,0 +1,31 @@
+<!-- templates/home.html-->
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <h2>Hi {{ user.username }}! </h2>
+    <br>
+    <a href="{% url 'voting:independent' %}">Vote for an Individual</a><br>
+    <a href="{% url 'voting:party' %}">Vote for a Party List</a>
+
+
+    <ul>
+      {% for position in positions %}
+      <li>
+        <h2>
+            {{position.position_title}}
+        </h2>
+        <p>{{ position.get_leading.get_full_name }}</p>
+      </li>
+      {% endfor %}    
+    </ul>
+    
+    <p><a href="{% url 'logout' %}">logout</a></p>
+  {% else %}
+    <p>You are not logged in</p>
+    <a href="{% url 'login' %}">login</a>
+  {% endif %}
+  
+{% endblock %}

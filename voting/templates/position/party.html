@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PartyList Voting</title>
+</head>
+<body>
+    <h1>Parties and their Candidates</h1>
+    <ul>
+        {% if parties %}
+            {% for party in parties %}
+                <li>
+                    <h4>
+                        <a href=""> 
+                        {% comment %} 
+                        link should be placed 
+                        {% endcomment %}
+                            {{ party.name }}
+
+
+                        </a>
+                    </h4>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>
+                <h1>
+                    We're Sorry. 
+                    No parties are registered at the moment.
+                </h1>
+            </li>
+        {% endif %}
+    </ul>
+</body>
+</html>
