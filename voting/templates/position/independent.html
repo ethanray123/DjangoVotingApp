@@ -20,11 +20,10 @@
                 <p>{{candidate.user.get_full_name}} 
                   {% if candidate.party %}
                     - {{candidate.party.name}}</p> 
-                    <a href="{% url 'voting:vote' candidate.id %}">Vote</a>
                   {% else %}
                     - independent</p> 
-                    <a href="{% url 'voting:vote' candidate.id %}">Vote</a>
                   {% endif %}
+                    <a href="{% url 'voting:vote' candidate.id %}">Vote</a>
               </li>
 
             {% endfor %}

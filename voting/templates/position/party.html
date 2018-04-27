@@ -10,7 +10,28 @@
             {% for party in parties %}
                 <li>
                     <h4>{{ party.name }}</h4>
-                    <a href="{% url 'voting:vote-party' party.id %}">Vote</a>
+
+                    <ol>
+                        <!-- {% if party.candidates %}
+                            yey
+                        {% else %}
+                            ney
+                        {% endif %} -->
+                        {% for candidate in party.candidates %}
+                        <li>
+                                <p>{{candidate.user.get_full_name}} 
+                            {% if candidate.party %}
+                                - {{candidate.party.name}}</p> 
+                            {% else %}
+                                - independent</p> 
+                            {% endif %}
+                                <a href="{% url 'voting:vote' candidate.id %}">Vote Candidate</a>
+                        </li>
+
+                        {% endfor %}
+                    </ol>
+                    <br>
+                    <a href="{% url 'voting:vote-party' party.id %}">Vote Party</a>
                 </li>
             {% endfor %}
         {% else %}

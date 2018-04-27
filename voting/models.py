@@ -46,6 +46,12 @@ class PartyList(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def candidates(self):
+        return self.candidate_infos.order_by("user__last_name")
+
+
+
 
 class Candidate(models.Model):
     user = models.OneToOneField(

@@ -36,11 +36,16 @@ def vote(request, candidate_id):
     candidate = get_object_or_404(Candidate, pk=candidate_id)
     # position = Position.objects.filter(position_title)
     if (not candidate.is_voted(voter) and
-            not candidate.position.is_voted(voter)):
+            not candidate.position.is_voted(voter) and
+            voter.get_full_name != candidate.user.get_full_name):
         Vote.objects.create(owner=voter, candidate=candidate)
         message = "Vote Successfully Registered"
     else:
-        message = "Cannot Vote! Vote Has Already Been Casted"
+        # if(candidate.is_voted(voter) and
+        #     candidate.position.is_voted(voter)):
+            message = "Cannot Vote! Vote Has Already Been Casted"
+        # elif voter.get_full_name != candidate.user.get_full_name:
+            # message = "Cannot Vote Self!"
 
     # redisplay the individual voting form.
     # add a Vote instance with:
@@ -63,7 +68,8 @@ def voteParty(request, party_id):
     party = get_object_or_404(PartyList, pk=party_id)
     for candidate in party.candidate_infos.all():
         if (not candidate.is_voted(voter) and
-                not candidate.position.is_voted(voter)):
+                not candidate.position.is_voted(voter) and
+                voter.get_full_name != candidate.user.get_full_name):
             Vote.objects.create(owner=voter, candidate=candidate)
             message = "Vote Successfully Registered via Party List"
         else:
