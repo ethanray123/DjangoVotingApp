@@ -51,7 +51,7 @@ class Candidate(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name='candidate_info'
+        related_name='candidate_infos'
     )
     position = models.ForeignKey(
         Position,
@@ -97,4 +97,5 @@ class Vote(models.Model):
     when = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "Voted for " + self.candidate.user.get_full_name()
+        return (self.owner.get_full_name() +
+                " voted for " + self.candidate.user.get_full_name())

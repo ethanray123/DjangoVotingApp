@@ -34,8 +34,8 @@ class CandidateView(DetailView):
 def vote(request, candidate_id):
     voter = request.user
     candidate = get_object_or_404(Candidate, pk=candidate_id)
-    if (
-        not candidate.is_voted(voter) and
+    # position = Position.objects.filter(position_title)
+    if (not candidate.is_voted(voter) and
             not candidate.position.is_voted(voter)):
         Vote.objects.create(owner=voter, candidate=candidate)
         message = "Vote Successfully Registered"
@@ -54,4 +54,23 @@ def vote(request, candidate_id):
         request, 'position/vote.html',
         {
             'message': message,
-        })
+        }
+    )
+
+
+def voteParty(request, party_id):
+    voter = request.user
+    party = get_object_or_404(PartyList, pk=party_id)
+    for candidate in party.candidate_infos.all():
+        if (not candidate.is_voted(voter) and
+                not candidate.position.is_voted(voter)):
+            Vote.objects.create(owner=voter, candidate=candidate)
+            message = "Vote Successfully Registered via Party List"
+        else:
+            message = "Cannot Vote! Vote Has Already Been Casted"
+    return render(
+        request, 'position/vote.html',
+        {
+            'message': message,
+        }
+    )

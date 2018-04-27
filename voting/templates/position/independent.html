@@ -7,6 +7,7 @@
     {{message}}
     <h1>Positions and their Candidates</h1>
     <ul>
+      {% if positions %}
       {% for position in positions %}
       <li>
         <h2>
@@ -29,7 +30,15 @@
             {% endfor %}
           </ol>
       </li>
-      {% endfor %}    
+      {% endfor %}
+      {% else %}
+      <li>
+          <h1>
+              We're Sorry. 
+              No Positions are registered at the moment.
+          </h1>
+      </li>
+      {% endif %}
     </ul>
 </body>
 </html>

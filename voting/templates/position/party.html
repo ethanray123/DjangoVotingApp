@@ -9,16 +9,8 @@
         {% if parties %}
             {% for party in parties %}
                 <li>
-                    <h4>
-                        <a href=""> 
-                        {% comment %} 
-                        link should be placed 
-                        {% endcomment %}
-                            {{ party.name }}
-
-
-                        </a>
-                    </h4>
+                    <h4>{{ party.name }}</h4>
+                    <a href="{% url 'voting:vote-party' party.id %}">Vote</a>
                 </li>
             {% endfor %}
         {% else %}

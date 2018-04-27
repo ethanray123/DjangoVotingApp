@@ -9,5 +9,6 @@ urlpatterns = [
     path('independent/', views.IndependentView.as_view(), name='independent'),
     path('party/', views.PartyView.as_view(), name='party'),
     path('candidate/<int:candidate_id>', views.CandidateView.as_view(), name='candidate-detail'),
-    path('vote/<int:candidate_id>', views.vote, name='vote'),
+    path('vote/candidate/<int:candidate_id>', views.vote, name='vote'),
+    path('vote/party/<int:party_id>', views.voteParty, name='vote-party'),
 ]
