@@ -7,9 +7,19 @@
   {% if user.is_authenticated %}
     <h2>Hi {{ user.username }}! </h2>
     <br>
-    <a href="{% url 'voting:independent' %}">Vote for an Individual</a><br>
-    <a href="{% url 'voting:party' %}">Vote for a Party List</a>
+    <ul class="collection">
+      <li class="collection-item">
+        <h4>
+          <a href="{% url 'voting:independent' %}">Vote for an Individual</a><br>
+        </h4>
+      </li>
 
+      <li class="collection-item">
+        <h4>
+          <a href="{% url 'voting:party' %}">Vote for a Party List</a>
+        </h4>
+      </li>
+    </ul>
 
     <ul>
       {% for position in positions %}
@@ -17,15 +27,23 @@
         <h2>
             {{position.position_title}}
         </h2>
-        <p>{{ position.get_leading.get_full_name }}</p>
+        <ul class="collection">
+          <li class="collection-item"><h3>
+          {% if position.get_leading %}
+            {{ position.get_leading.get_full_name }}
+          {% else %}
+            No candidates currently have votes
+          {% endif%}
+          </h3></li>
+        </ul>
       </li>
       {% endfor %}    
     </ul>
-    
-    <p><a href="{% url 'logout' %}">logout</a></p>
+    <br><br>
+    <a href="{% url 'logout' %}" class="btn">logout</a>
   {% else %}
-    <p>You are not logged in</p>
-    <a href="{% url 'login' %}">login</a>
+    <h3>You are not logged in...</h3>
+    <a href="{% url 'login' %}" class="btn">login</a>
   {% endif %}
   
 {% endblock %}

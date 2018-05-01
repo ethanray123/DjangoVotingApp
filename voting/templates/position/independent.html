@@ -1,53 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Individual Voting</title>
-</head>
-<body>
-    {{message}}
-    <h1>Positions and their Candidates</h1>
-    <ul>
-      {% if positions %}
-      {% for position in positions %}
-      <li>
-        <h2>
-            {{position.position_title}}
-        </h2>
-          {% csrf_token %}
-          <ol>
-            {% for candidate in position.candidates %}
-              <li>
-                <p>{{candidate.user.get_full_name}} 
-                  {% if candidate.party %}
-                    - {{candidate.party.name}}</p> 
-                  {% else %}
-                    - independent</p> 
-                  {% endif %}
-                    <a href="{% url 'voting:vote' candidate.id %}">Vote</a>
-              </li>
+{% extends 'base.html' %}
 
-            {% endfor %}
-          </ol>
-      </li>
-      {% endfor %}
-      {% else %}
-      <li>
-          <h1>
-              We're Sorry. 
-              No Positions are registered at the moment.
-          </h1>
-      </li>
-      {% endif %}
-    </ul>
+{% block title %}Voting (Individual){% endblock %}
 
-    <nav>
-      <button onclick="goBack()" >Back</button>
-    </nav>  
+{% block content %}
+  {% if user.is_authenticated %}
+    {{message}}   
+      <h3>Positions and their Candidates</h3>
+      <ul class="collection">
+        {% if positions %}
+        {% for position in positions %}
+        <li class="collection-item">
+          <h4>
+              {{position.position_title}}
+          </h4>
+            {% csrf_token %}
+            <ol class="collection">
+              {% for candidate in position.candidates %}
+                <li class="collection-item">
+                  <h5>{{candidate.user.get_full_name}} 
+                    {% if candidate.party %}
+                      - {{candidate.party.name}}</h5> 
+                    {% else %}
+                      - independent</h5> 
+                    {% endif %}
+                      <a href="{% url 'voting:vote' candidate.id %}" class="btn">Vote</a>
+                </li>
 
-<script>
-  function goBack(){
-    window.history.back();
-  }
-</script>
-</body>
-</html>
+              {% endfor %}
+            </ol>
+        </li>
+        {% endfor %}
+        {% else %}
+        <li class="collection-item">
+            <h1>
+                We're Sorry. 
+                No Positions are registered at the moment.
+            </h1>
+        </li>
+        {% endif %}
+      </ul>
+      <br><br>
+      <button class="btn" onclick="goBack()" >Go Back</button>
+  {% else %}
+    <h3>You are not logged in...</h3>
+    <a href="{% url 'login' %}" class="btn">login</a>
+  {% endif %}  
+
+{% endblock %}

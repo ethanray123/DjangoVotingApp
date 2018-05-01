@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>PartyList Voting</title>
-</head>
-<body>
-    <h1>Parties and their Candidates</h1>
-    <ul>
+{% extends 'base.html' %}
+
+{% block title %}Voting (Party){% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+    <h3>Parties and their Candidates</h3>
+    <ul class="collection">
         {% if parties %}
             {% for party in parties %}
-                <li>
+                <li class="collection-item">
                     <h4>{{ party.name }}</h4>
 
                     <ol>
@@ -19,23 +19,24 @@
                         {% endif %} -->
                         {% for candidate in party.candidates %}
                         <li>
-                                <p>{{candidate.user.get_full_name}} 
+                                <h5>{{candidate.user.get_full_name}} 
                             {% if candidate.party %}
-                                - {{candidate.party.name}}</p> 
+                                - {{candidate.party.name}}</h5> 
                             {% else %}
-                                - independent</p> 
+                                - independent</h5> 
                             {% endif %}
-                                <a href="{% url 'voting:vote' candidate.id %}">Vote Candidate</a>
+                                <a href="{% url 'voting:vote' candidate.id %}" class="btn">Vote Candidate</a>
                         </li>
 
                         {% endfor %}
                     </ol>
                     <br>
-                    <a href="{% url 'voting:vote-party' party.id %}">Vote Party</a>
+                    <a href="{% url 'voting:vote-party' party.id %}" class="btn">Vote Party</a>
+                    <br><br>
                 </li>
             {% endfor %}
         {% else %}
-            <li>
+            <li class="collection-item">
                 <h1>
                     We're Sorry. 
                     No parties are registered at the moment.
@@ -43,15 +44,11 @@
             </li>
         {% endif %}
     </ul>
-
-    <nav>
-      <button onclick="goBack()" >Back</button>
-    </nav>  
-
-<script>
-  function goBack(){
-    window.history.back();
-  }
-</script>
-</body>
-</html>
+    <br><br>
+    <button onclick="goBack()" class="btn">Back</button>
+    {% else %}
+    <h3>You are not logged in...</h3>
+    <a href="{% url 'login' %}" class="btn">login</a>
+  {% endif %}
+  
+{% endblock %}

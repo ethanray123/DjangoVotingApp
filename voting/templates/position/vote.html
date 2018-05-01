@@ -1,11 +1,16 @@
-{{message}}
+{% extends 'base.html' %}
 
-<nav>
-		<button onclick="goBack()" >Back</button>
-</nav>	
+{% block title %}Vote Verification{% endblock %}
 
-<script>
-	function goBack(){
-		window.history.back();
-	}
-</script>
+{% block content %}
+  	{% if user.is_authenticated %}
+  		<br><br>
+		<h3>{{message}}</h3>
+		<br><br><br>
+		<button onclick="goBack()" class="btn">Back</button>
+	{% else %}
+	    <h3>You are not logged in...</h3>
+	    <a href="{% url 'login' %}" class="btn">login</a>
+  	{% endif %}  
+
+{% endblock %}
